@@ -1,0 +1,300 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6C4310AA13C24962004B9B8B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C4310A913C24962004B9B8B /* Cocoa.framework */; };
+		6C4310B413C24962004B9B8B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6C4310B213C24962004B9B8B /* InfoPlist.strings */; };
+		6C4310B713C24962004B9B8B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4310B613C24962004B9B8B /* main.m */; };
+		6C4310BA13C24962004B9B8B /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 6C4310B813C24962004B9B8B /* Credits.rtf */; };
+		6C4310BD13C24962004B9B8B /* McChunkAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4310BC13C24962004B9B8B /* McChunkAppDelegate.m */; };
+		6C4310C013C24962004B9B8B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C4310BE13C24962004B9B8B /* MainMenu.xib */; };
+		6C4310C813C24A91004B9B8B /* MapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4310C713C24A91004B9B8B /* MapView.m */; };
+		6C4310CB13C24FA3004B9B8B /* RegionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4310CA13C24FA3004B9B8B /* RegionView.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		6C4310A513C24962004B9B8B /* McChunk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = McChunk.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C4310A913C24962004B9B8B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		6C4310AC13C24962004B9B8B /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		6C4310AD13C24962004B9B8B /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		6C4310AE13C24962004B9B8B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		6C4310B113C24962004B9B8B /* McChunk-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "McChunk-Info.plist"; sourceTree = "<group>"; };
+		6C4310B313C24962004B9B8B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		6C4310B513C24962004B9B8B /* McChunk-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "McChunk-Prefix.pch"; sourceTree = "<group>"; };
+		6C4310B613C24962004B9B8B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		6C4310B913C24962004B9B8B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		6C4310BB13C24962004B9B8B /* McChunkAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = McChunkAppDelegate.h; sourceTree = "<group>"; };
+		6C4310BC13C24962004B9B8B /* McChunkAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = McChunkAppDelegate.m; sourceTree = "<group>"; };
+		6C4310BF13C24962004B9B8B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		6C4310C613C24A91004B9B8B /* MapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapView.h; sourceTree = "<group>"; };
+		6C4310C713C24A91004B9B8B /* MapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapView.m; sourceTree = "<group>"; };
+		6C4310C913C24FA2004B9B8B /* RegionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegionView.h; sourceTree = "<group>"; };
+		6C4310CA13C24FA3004B9B8B /* RegionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegionView.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6C4310A213C24962004B9B8B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C4310AA13C24962004B9B8B /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6C43109A13C24962004B9B8B = {
+			isa = PBXGroup;
+			children = (
+				6C4310AF13C24962004B9B8B /* McChunk */,
+				6C4310A813C24962004B9B8B /* Frameworks */,
+				6C4310A613C24962004B9B8B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6C4310A613C24962004B9B8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6C4310A513C24962004B9B8B /* McChunk.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6C4310A813C24962004B9B8B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6C4310A913C24962004B9B8B /* Cocoa.framework */,
+				6C4310AB13C24962004B9B8B /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6C4310AB13C24962004B9B8B /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6C4310AC13C24962004B9B8B /* AppKit.framework */,
+				6C4310AD13C24962004B9B8B /* CoreData.framework */,
+				6C4310AE13C24962004B9B8B /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		6C4310AF13C24962004B9B8B /* McChunk */ = {
+			isa = PBXGroup;
+			children = (
+				6C4310BB13C24962004B9B8B /* McChunkAppDelegate.h */,
+				6C4310BC13C24962004B9B8B /* McChunkAppDelegate.m */,
+				6C4310BE13C24962004B9B8B /* MainMenu.xib */,
+				6C4310C613C24A91004B9B8B /* MapView.h */,
+				6C4310C713C24A91004B9B8B /* MapView.m */,
+				6C4310C913C24FA2004B9B8B /* RegionView.h */,
+				6C4310CA13C24FA3004B9B8B /* RegionView.m */,
+				6C4310B013C24962004B9B8B /* Supporting Files */,
+			);
+			path = McChunk;
+			sourceTree = "<group>";
+		};
+		6C4310B013C24962004B9B8B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				6C4310B113C24962004B9B8B /* McChunk-Info.plist */,
+				6C4310B213C24962004B9B8B /* InfoPlist.strings */,
+				6C4310B513C24962004B9B8B /* McChunk-Prefix.pch */,
+				6C4310B613C24962004B9B8B /* main.m */,
+				6C4310B813C24962004B9B8B /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6C4310A413C24962004B9B8B /* McChunk */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6C4310C313C24962004B9B8B /* Build configuration list for PBXNativeTarget "McChunk" */;
+			buildPhases = (
+				6C4310A113C24962004B9B8B /* Sources */,
+				6C4310A213C24962004B9B8B /* Frameworks */,
+				6C4310A313C24962004B9B8B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = McChunk;
+			productName = McChunk;
+			productReference = 6C4310A513C24962004B9B8B /* McChunk.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6C43109C13C24962004B9B8B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = "MikBarr Studios";
+			};
+			buildConfigurationList = 6C43109F13C24962004B9B8B /* Build configuration list for PBXProject "McChunk" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 6C43109A13C24962004B9B8B;
+			productRefGroup = 6C4310A613C24962004B9B8B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6C4310A413C24962004B9B8B /* McChunk */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6C4310A313C24962004B9B8B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C4310B413C24962004B9B8B /* InfoPlist.strings in Resources */,
+				6C4310BA13C24962004B9B8B /* Credits.rtf in Resources */,
+				6C4310C013C24962004B9B8B /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6C4310A113C24962004B9B8B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C4310B713C24962004B9B8B /* main.m in Sources */,
+				6C4310BD13C24962004B9B8B /* McChunkAppDelegate.m in Sources */,
+				6C4310C813C24A91004B9B8B /* MapView.m in Sources */,
+				6C4310CB13C24FA3004B9B8B /* RegionView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		6C4310B213C24962004B9B8B /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6C4310B313C24962004B9B8B /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		6C4310B813C24962004B9B8B /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6C4310B913C24962004B9B8B /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		6C4310BE13C24962004B9B8B /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6C4310BF13C24962004B9B8B /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		6C4310C113C24962004B9B8B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		6C4310C213C24962004B9B8B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		6C4310C413C24962004B9B8B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "McChunk/McChunk-Prefix.pch";
+				INFOPLIST_FILE = "McChunk/McChunk-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		6C4310C513C24962004B9B8B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "McChunk/McChunk-Prefix.pch";
+				INFOPLIST_FILE = "McChunk/McChunk-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6C43109F13C24962004B9B8B /* Build configuration list for PBXProject "McChunk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6C4310C113C24962004B9B8B /* Debug */,
+				6C4310C213C24962004B9B8B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6C4310C313C24962004B9B8B /* Build configuration list for PBXNativeTarget "McChunk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6C4310C413C24962004B9B8B /* Debug */,
+				6C4310C513C24962004B9B8B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6C43109C13C24962004B9B8B /* Project object */;
+}
