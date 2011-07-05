@@ -12,7 +12,9 @@
 
 @interface MapViewController : NSObject {
 @private
-    MapView* map;
+    IBOutlet id window;
+    IBOutlet id mapScroller;
 }
+- (IBAction)openRegion:(id)sender;
 
 @end

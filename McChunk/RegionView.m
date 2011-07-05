@@ -66,13 +66,16 @@ MCPixel MCPoint(CGFloat x, CGFloat y, NSColor* color) {
 @synthesize mapFolder, regionFile, data;
 
 - (id)initWithMap:(NSString *)map andFile:(NSString*)file {
-    NSRect frame = NSMakeRect(0, 0, 512, 512);
+    NSArray* comps = [file componentsSeparatedByString:@"."];
+    NSRect frame = NSMakeRect([[comps objectAtIndex:1] intValue]*512, [[comps objectAtIndex:2] intValue]*512, 512, 512);
+    NSLog(@"RegionView frame %f %f, %f %f", frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
     if ( (self = [super initWithFrame:frame]) ) {
         if ( [map length] > 0 && [file length] > 0 ) {
             self.mapFolder = map;
             self.regionFile = file;
-            self.data = [NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/region/%@", mapFolder, regionFile]];
+            self.data = [NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", mapFolder, regionFile]];
             NSLog(@"Data length %u", [data length]);
+//            [self decompress];
         }
     }
     return self;
@@ -84,14 +87,12 @@ MCPixel MCPoint(CGFloat x, CGFloat y, NSColor* color) {
     [super dealloc];
 }
 
-- (void)drawRect:(NSRect)dirtyRect {
-    // Drawing code here.
-    
+- (void)decompress {
     void* ptr = [data bytes];
     int chunks_offset[1024];
     char chunks_sectors[1024];
     char* sec;
-
+    
     void* ptr0 = ptr;
     int num_chunks = 0;
     NSLog(@"Initial pointer %d", ptr0);
@@ -125,7 +126,12 @@ MCPixel MCPoint(CGFloat x, CGFloat y, NSColor* color) {
         }
     }
     
-    MCPoint(50,25,[NSColor redColor]);
+}
+
+- (void)drawRect:(NSRect)dirtyRect {
+    // Drawing code here.
+    NSLog(@"%f %f, %f %f", [self frame].origin.x, [self frame].origin.y, [self frame].size.width, [self frame].size.height);
+//    MCPoint(0,0,[NSColor redColor]);
 }
 
 @end

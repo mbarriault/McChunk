@@ -10,19 +10,31 @@
 
 @implementation MapView
 
-- (void)awakeFromNib {
-    [window setDelegate:self];
-}
-
-- (void)windowWillClose:(NSNotification*)aNotification {
-    [NSApp terminate:self];
-}
-
-- (id)initWithFrame:(NSRect)frame
-{
+- (id)initWithMap:(NSString*)mapDir {
+    NSArray* files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[NSString stringWithFormat:@"%@", mapDir] error:NULL];
+    NSLog(@"%@", files);
+    int wspan[2], hspan[2];
+    for ( int i=0; i<2; i++ )
+        wspan[i] = hspan[i] = 0;
+    for ( NSString* file in files ) {
+        NSArray* comps = [file componentsSeparatedByString:@"."];
+        if ( [[comps objectAtIndex:1] intValue] < wspan[0] )
+            wspan[0] = [[comps objectAtIndex:1] intValue];
+        if ( [[comps objectAtIndex:1] intValue] > wspan[1] )
+            wspan[1] = [[comps objectAtIndex:1] intValue];
+        if ( [[comps objectAtIndex:2] intValue] < hspan[0] )
+            hspan[0] = [[comps objectAtIndex:2] intValue];
+        if ( [[comps objectAtIndex:2] intValue] > hspan[1] )
+            hspan[1] = [[comps objectAtIndex:2] intValue];
+    }
+    NSRect frame = NSMakeRect(wspan[0]*512, hspan[0]*512, (wspan[1]-wspan[0]+1)*512, (hspan[1]-hspan[0]+1)*512);
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code here.
+        [regions release];
+        regions = [[NSMutableArray alloc] initWithCapacity:[files count]];
+        for ( NSString *regionFile in files )
+            [regions addObject:[[[RegionView alloc] initWithMap:mapDir andFile:regionFile] autorelease]];
     }
     
     return self;
@@ -34,26 +46,11 @@
     [super dealloc];
 }
 
-- (IBAction)openRegion:(id)sender {
-    NSOpenPanel* open = [NSOpenPanel openPanel];
-    [open setCanChooseDirectories:YES];
-    [open setCanChooseFiles:NO];
-//    [open setDirectoryURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/Library/Application Support/minecraft/saves", NSHomeDirectory()] isDirectory:YES]];
-    if ( [open runModalForDirectory:nil file:nil] == NSOKButton ) {
-        NSArray* files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[NSString stringWithFormat:@"%@/region", [open filename]] error:NULL];
-        NSLog(@"%@", files);
-        [regions release];
-        regions = [[NSMutableArray alloc] initWithCapacity:[files count]];
-        for ( NSString *regionFile in files )
-            [regions addObject:[[RegionView alloc] initWithMap:[open filename] andFile:regionFile]];
-    }
-    [self setNeedsDisplay:YES];
-}
-
 - (void)drawRect:(NSRect)dirtyRect
 {
     // Drawing code here.
-    NSLog(@"%f %f, %f %f", dirtyRect.origin.x, dirtyRect.origin.y, dirtyRect.size.width, dirtyRect.size.height);
+    NSLog(@"MapView frame %f %f, %f %f", dirtyRect.origin.x, dirtyRect.origin.y, dirtyRect.size.width, dirtyRect.size.height);
+    NSLog(@"Number of regions %d", [regions count]);
     for ( RegionView* region in regions )
         [self addSubview:region];
 }

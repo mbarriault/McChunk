@@ -12,9 +12,8 @@
 
 @interface MapView : NSView {
 @private
-    IBOutlet id window;
     NSMutableArray* regions;
 }
-- (IBAction)openRegion:(id)sender;
+- (id)initWithMap:(NSString*)mapDir;
 
 @end
