@@ -12,8 +12,6 @@
 
 - (void)awakeFromNib {
     [window setDelegate:self];
-    regionView = [[RegionView alloc] initWithOrigin:NSMakePoint(0, 0)];
-    [self addSubview:regionView];
 }
 
 - (void)windowWillClose:(NSNotification*)aNotification {
@@ -32,7 +30,7 @@
 
 - (void)dealloc
 {
-    [regionView release];
+    [regions release];
     [super dealloc];
 }
 
@@ -42,32 +40,22 @@
     [open setCanChooseFiles:NO];
 //    [open setDirectoryURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/Library/Application Support/minecraft/saves", NSHomeDirectory()] isDirectory:YES]];
     if ( [open runModalForDirectory:nil file:nil] == NSOKButton ) {
-        NSString* world = [open filename];
-        NSLog(@"%@", world);
+        NSArray* files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[NSString stringWithFormat:@"%@/region", [open filename]] error:NULL];
+        NSLog(@"%@", files);
+        [regions release];
+        regions = [[NSMutableArray alloc] initWithCapacity:[files count]];
+        for ( NSString *regionFile in files )
+            [regions addObject:[[RegionView alloc] initWithMap:[open filename] andFile:regionFile]];
     }
+    [self setNeedsDisplay:YES];
 }
 
 - (void)drawRect:(NSRect)dirtyRect
 {
     // Drawing code here.
     NSLog(@"%f %f, %f %f", dirtyRect.origin.x, dirtyRect.origin.y, dirtyRect.size.width, dirtyRect.size.height);
-    NSBezierPath *path = [NSBezierPath bezierPath];
-    [path setLineWidth: 4];
-    
-    NSPoint startPoint = {  21, 21 };
-    NSPoint endPoint   = { 128,128 };
-    
-    [path moveToPoint: startPoint];	
-    
-    [path curveToPoint: endPoint
-         controlPoint1: NSMakePoint ( 128, 21 )
-         controlPoint2: NSMakePoint (  21,128 )];
-    
-    [[NSColor whiteColor] set];
-    [path fill];
-    
-    [[NSColor grayColor] set]; 
-    [path stroke];
+    for ( RegionView* region in regions )
+        [self addSubview:region];
 }
 
 @end

@@ -15,6 +15,7 @@
 		6C4310C013C24962004B9B8B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C4310BE13C24962004B9B8B /* MainMenu.xib */; };
 		6C4310C813C24A91004B9B8B /* MapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4310C713C24A91004B9B8B /* MapView.m */; };
 		6C4310CB13C24FA3004B9B8B /* RegionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4310CA13C24FA3004B9B8B /* RegionView.m */; };
+		6C4310CE13C3A820004B9B8B /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4310CD13C3A820004B9B8B /* MapViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,8 @@
 		6C4310C713C24A91004B9B8B /* MapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapView.m; sourceTree = "<group>"; };
 		6C4310C913C24FA2004B9B8B /* RegionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegionView.h; sourceTree = "<group>"; };
 		6C4310CA13C24FA3004B9B8B /* RegionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegionView.m; sourceTree = "<group>"; };
+		6C4310CC13C3A820004B9B8B /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
+		6C4310CD13C3A820004B9B8B /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +96,8 @@
 				6C4310BE13C24962004B9B8B /* MainMenu.xib */,
 				6C4310C613C24A91004B9B8B /* MapView.h */,
 				6C4310C713C24A91004B9B8B /* MapView.m */,
+				6C4310CC13C3A820004B9B8B /* MapViewController.h */,
+				6C4310CD13C3A820004B9B8B /* MapViewController.m */,
 				6C4310C913C24FA2004B9B8B /* RegionView.h */,
 				6C4310CA13C24FA3004B9B8B /* RegionView.m */,
 				6C4310B013C24962004B9B8B /* Supporting Files */,
@@ -179,6 +184,7 @@
 				6C4310BD13C24962004B9B8B /* McChunkAppDelegate.m in Sources */,
 				6C4310C813C24A91004B9B8B /* MapView.m in Sources */,
 				6C4310CB13C24FA3004B9B8B /* RegionView.m in Sources */,
+				6C4310CE13C3A820004B9B8B /* MapViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,6 +232,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-lz";
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -240,6 +247,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				OTHER_LDFLAGS = "-lz";
 				SDKROOT = macosx;
 			};
 			name = Release;

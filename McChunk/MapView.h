@@ -13,7 +13,7 @@
 @interface MapView : NSView {
 @private
     IBOutlet id window;
-    RegionView* regionView;
+    NSMutableArray* regions;
 }
 - (IBAction)openRegion:(id)sender;
 

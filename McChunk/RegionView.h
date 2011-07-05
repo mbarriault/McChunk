@@ -14,8 +14,15 @@ MCPixel MCPoint(CGFloat, CGFloat, NSColor*);
 
 @interface RegionView : NSView {
 @private
-    
+@public
+    NSString* mapFolder;
+    NSString* regionFile;
+    NSData* data;
 }
-- (id)initWithOrigin:(NSPoint)origin;
+- (id)initWithMap:(NSString*)map andFile:(NSString*)file;
+
+@property (nonatomic, retain) NSString* mapFolder;
+@property (nonatomic, retain) NSString* regionFile;
+@property (nonatomic, retain) NSData* data;
 
 @end
