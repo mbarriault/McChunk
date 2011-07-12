@@ -30,7 +30,12 @@
 }
 
 - (IBAction)openRegion:(id)sender {
-    NSLog(@"%f %f, %f %f", [mapScroller frame].origin.x, [mapScroller frame].origin.y, [mapScroller frame].size.width, [mapScroller frame].size.height);
+    NSScrollView* mapScroller = [[NSScrollView alloc] initWithFrame:[[window contentView] frame]];
+    [mapScroller setHasHorizontalScroller:YES];
+    [mapScroller setHasVerticalScroller:YES];
+    [mapScroller setBorderType:NSNoBorder];
+    [mapScroller setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
+    NSLog(@"Scrollview frame %f %f, %f %f", [mapScroller frame].origin.x, [mapScroller frame].origin.y, [mapScroller frame].size.width, [mapScroller frame].size.height);
     NSOpenPanel* open = [NSOpenPanel openPanel];
     [open setCanChooseDirectories:YES];
     [open setCanChooseFiles:NO];
@@ -40,7 +45,8 @@
         [mapScroller setDocumentView:map];
         [map release];
     }
-    [mapScroller setNeedsDisplay:YES];
+    [window setContentView:mapScroller];
+    [mapScroller release];
 }
 
 - (void)dealloc

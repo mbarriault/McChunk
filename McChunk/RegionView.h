@@ -18,8 +18,11 @@ MCPixel MCPoint(CGFloat, CGFloat, NSColor*);
     NSString* mapFolder;
     NSString* regionFile;
     NSData* data;
+    NSMutableArray* chunks;
+    NSMutableArray* 
 }
-- (id)initWithMap:(NSString*)map andFile:(NSString*)file;
+- (id)initWithMap:(NSString*)map andFile:(NSString*)file andOffset:(NSPoint)offset;
+- (void)decompress;
 
 @property (nonatomic, retain) NSString* mapFolder;
 @property (nonatomic, retain) NSString* regionFile;
