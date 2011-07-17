@@ -1,3 +1,5 @@
 build/*
 McChunk.xcodeproj/xcuserdata/*
 McChunk.xcodeproj/project.xcworkspace/xcuserdata/*
+.DS_Store
+*.app

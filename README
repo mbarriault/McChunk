@@ -1,0 +1,23 @@
+McChunk
+Minecraft chunk deleter
+Copyright 2011 Michael Barriault
+
+Features:
+-Renders top-down 2D render of a world
+
+Upcoming features:
+-Scaled rendering for large worlds
+-Click-to-select chunks and regions
+-Delete chunks
+-Rearrange chunks
+
+Known issues:
+-Will almost definitely crash on large worlds.
+-Some chunks aren't read correctly and won't render (doesn't seem to affect other chunks).
+-Memory leaks very likely.
+-Debug info is abundent, will clog up your Console.
+
+Howto:
+-Open app
+-File->Open
+-Choose folder containing .mcr files.

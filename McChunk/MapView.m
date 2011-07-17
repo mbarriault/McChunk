@@ -3,7 +3,8 @@
 //  McChunk
 //
 //  Created by Michael Barriault on 11-07-04.
-//  Copyright 2011 MikBarr Studios. All rights reserved.
+//  Copyright 2011 Michael Barriault. All rights reserved.
+//  See LICENSE for copyright information
 //
 
 #import "MapView.h"
@@ -33,23 +34,19 @@
         hspan[i] = hspan[i]-hspan[0];
     }
     NSRect frame = NSMakeRect(wspan[0]*512, hspan[0]*512, (wspan[1]-wspan[0]+1)*512, (hspan[1]-hspan[0]+1)*512);
-    NSLog(@"!MapView frame %f %f, %f %f", frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code here.
         [regions release];
         regions = [[NSMutableArray alloc] initWithCapacity:[files count]];
-        for ( NSString *regionFile in files )
+        for ( NSString *regionFile in files ) {
             [regions addObject:[[[RegionView alloc] initWithMap:mapDir andFile:regionFile andOffset:offset] autorelease]];
+        }
     }
-    
-    return self;
-}
-
-- (void)awakeFromNib {
-    NSLog(@"MapView frame %f %f, %f %f", [self frame].origin.x, [self frame].origin.y, [self frame].size.width, [self frame].size.height);
     for ( RegionView* region in regions )
         [self addSubview:region];
+    
+    return self;
 }
 
 - (void)dealloc
@@ -61,9 +58,7 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
     // Drawing code here.
-    NSLog(@"Redrawn map!");
-    for ( RegionView* region in regions )
-        [self addSubview:region];
+    NSLog(@"MapView frame %f %f, %f %f", [self frame].origin.x, [self frame].origin.y, [self frame].size.width, [self frame].size.height);
 }
 
 @end

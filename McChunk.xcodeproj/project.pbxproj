@@ -16,6 +16,7 @@
 		6C4310C813C24A91004B9B8B /* MapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4310C713C24A91004B9B8B /* MapView.m */; };
 		6C4310CB13C24FA3004B9B8B /* RegionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4310CA13C24FA3004B9B8B /* RegionView.m */; };
 		6C4310CE13C3A820004B9B8B /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4310CD13C3A820004B9B8B /* MapViewController.m */; };
+		6CBB82CC13D3436000116F56 /* ChunkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBB82CB13D3436000116F56 /* ChunkView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,10 @@
 		6C4310CA13C24FA3004B9B8B /* RegionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegionView.m; sourceTree = "<group>"; };
 		6C4310CC13C3A820004B9B8B /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		6C4310CD13C3A820004B9B8B /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
+		6CBB82CA13D3436000116F56 /* ChunkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChunkView.h; sourceTree = "<group>"; };
+		6CBB82CB13D3436000116F56 /* ChunkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChunkView.m; sourceTree = "<group>"; };
+		6CBB82D213D3793000116F56 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		6CBB82D313D379DE00116F56 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +60,8 @@
 		6C43109A13C24962004B9B8B = {
 			isa = PBXGroup;
 			children = (
+				6CBB82D213D3793000116F56 /* LICENSE */,
+				6CBB82D313D379DE00116F56 /* README */,
 				6C4310AF13C24962004B9B8B /* McChunk */,
 				6C4310A813C24962004B9B8B /* Frameworks */,
 				6C4310A613C24962004B9B8B /* Products */,
@@ -100,6 +107,8 @@
 				6C4310C713C24A91004B9B8B /* MapView.m */,
 				6C4310C913C24FA2004B9B8B /* RegionView.h */,
 				6C4310CA13C24FA3004B9B8B /* RegionView.m */,
+				6CBB82CA13D3436000116F56 /* ChunkView.h */,
+				6CBB82CB13D3436000116F56 /* ChunkView.m */,
 				6C4310B013C24962004B9B8B /* Supporting Files */,
 			);
 			path = McChunk;
@@ -185,6 +194,7 @@
 				6C4310C813C24A91004B9B8B /* MapView.m in Sources */,
 				6C4310CB13C24FA3004B9B8B /* RegionView.m in Sources */,
 				6C4310CE13C3A820004B9B8B /* MapViewController.m in Sources */,
+				6CBB82CC13D3436000116F56 /* ChunkView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,6 +311,7 @@
 				6C4310C513C24962004B9B8B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

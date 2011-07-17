@@ -3,10 +3,12 @@
 //  McChunk
 //
 //  Created by Michael Barriault on 11-07-04.
-//  Copyright 2011 MikBarr Studios. All rights reserved.
+//  Copyright 2011 Michael Barriault. All rights reserved.
+//  See LICENSE for copyright information
 //
 
 #import "RegionView.h"
+#import "ChunkView.h"
 #import <zlib.h>
 
 // Zlib decompress from and modified into functional form from 
@@ -54,40 +56,36 @@ NSData * zlibInflate(NSData* self) {
 	else return nil;
 }
 
-MCPixel MCPoint(CGFloat x, CGFloat y, NSColor* color) {
-    MCPixel aPoint = NSMakeRect(x, y, 2, 2);
-    [color set];
-    NSRectFill(aPoint);
-    return aPoint;
-}
-
 @implementation RegionView
 
-@synthesize mapFolder, regionFile, data;
+@synthesize mapFolder, regionFile;
 
-- (id)initWithMap:(NSString *)map andFile:(NSString*)file andOffset:(NSPoint)offset {
+- (id)initWithMap:(NSString *)map andFile:(NSString*)file andOffset:(NSPoint)ioffset {
+    offset = ioffset;
     NSArray* comps = [file componentsSeparatedByString:@"."];
     NSRect frame = NSMakeRect(([[comps objectAtIndex:1] intValue]-offset.x)*512, ([[comps objectAtIndex:2] intValue]-offset.y)*512, 512, 512);
-    NSLog(@"RegionView frame %f %f, %f %f", frame.origin.x, frame.origin.y, frame.size.width, frame.size.height);
     if ( (self = [super initWithFrame:frame]) ) {
         if ( [map length] > 0 && [file length] > 0 ) {
             self.mapFolder = map;
             self.regionFile = file;
-            self.data = [NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", mapFolder, regionFile]];
-            NSLog(@"Data length %u", (unsigned)[data length]);
-            [self decompress];
+            NSData* data = [NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", mapFolder, regionFile]];
+            //NSLog(@"Data length %u", (unsigned)[data length]);
+            [self decompress:data];
         }
+        for ( ChunkView* chunk in chunks )
+            [self addSubview:chunk];
     }
     return self;
 }
 
 - (void)dealloc {
     [mapFolder release];
-    [data release];
+    [chunks release];
     [super dealloc];
 }
 
-- (void)decompress {
+- (void)decompress:(NSData*)data {
+    bool debug = false;
     void* ptr = (void*)[data bytes];
     int chunks_offset[1024];
     char chunks_sectors[1024];
@@ -95,7 +93,7 @@ MCPixel MCPoint(CGFloat x, CGFloat y, NSColor* color) {
     
     void* ptr0 = ptr;
     int num_chunks = 0;
-    NSLog(@"Initial pointer %u", (unsigned)ptr0);
+    //NSLog(@"Initial pointer %u", (unsigned)ptr0);
     while ( ptr < ptr0+4096 ) {
         int i = (int)((ptr-ptr0)/4);
         chunks_offset[i] = Endian32_Swap(*(int*)ptr);
@@ -117,106 +115,111 @@ MCPixel MCPoint(CGFloat x, CGFloat y, NSColor* color) {
             ptr += 4;
             char type = *(char*)ptr;
             ptr += 1;
-            NSLog(@"Length of chunk %d and compression type %d", len, type);
+            //NSLog(@"Length of chunk %d and compression type %d", len, type);
             NSData* compressedData = [NSData dataWithBytes:ptr length:len-1];
             NSData* decompressedData = [NSData dataWithData:zlibInflate(compressedData)];
-            NSLog(@"Compressed %u decompressed %u", (unsigned)[compressedData length], (unsigned)[decompressedData length]);
+            //NSLog(@"Compressed %u decompressed %u", (unsigned)[compressedData length], (unsigned)[decompressedData length]);
 
             void* tag_ptr = (void*)[decompressedData bytes];
             void* tag_ptr0 = tag_ptr;
             int l;
             NSString* theString;
+            int tag_id;
+            NSData* blocks;
+            int xpos;
+            int zpos;
+            bool got[3];
+            for ( int i=0; i<3; i++ ) got[i] = false;
             while ( tag_ptr < tag_ptr0 + [decompressedData length] ) {
-                switch (*(char*)tag_ptr) {
+                tag_id = *(char*)tag_ptr;
+                tag_ptr++; // Pass tag ID
+                l = Endian16_Swap(*(short*)tag_ptr); // Length of string
+                tag_ptr += 2; // Go to string
+                theString = [[NSString alloc] initWithData:[NSData dataWithBytes:tag_ptr length:l] encoding:NSUTF8StringEncoding];
+                tag_ptr += l; // Pass string ID
+                switch (tag_id) {
                     case 10: // TAG_Compound
-                        tag_ptr++;
-                        tag_ptr += Endian16_Swap(*(short*)tag_ptr)+2; // Skip string ID
                         break;
                         
                     case 9: // TAG_List
                         tag_ptr++;
-                        tag_ptr += Endian16_Swap(*(short*)tag_ptr)+2; // Skip string ID
-                        tag_ptr += Endian32_Swap(*(int*)tag_ptr)+4;  // Length of list as integer
+                        l = Endian32_Swap(*(int*)tag_ptr);
+                        tag_ptr += 4+l;  // Length of list as integer
+                        if ( debug ) NSLog(@"%@ Found a TAG_List of length %d and type %d", theString, l, *(char*)(tag_ptr-l-4-1));
                         break;
                         
                     case 8: // TAG_String
-                        tag_ptr++;
-                        tag_ptr += Endian16_Swap(*(short*)tag_ptr)+2; // Skip string ID
-                        tag_ptr += Endian16_Swap(*(short*)tag_ptr)+2; // Length of string
+                        l = Endian16_Swap(*(short*)tag_ptr);
+                        tag_ptr += 2;
+                        NSString* theStringValue = [[NSString alloc] initWithData:[NSData dataWithBytes:tag_ptr length:l] encoding:NSUTF8StringEncoding];
+                        tag_ptr += l; // Length of string
+                        if ( debug ) NSLog(@"%@ Found a TAG_String of length %d and data %@", theString, l, theStringValue);
+                        [theStringValue release];
                         break;
                         
                     case 7: // TAG_ByteArray
-                        tag_ptr++;
-                        l = Endian16_Swap(*(short*)tag_ptr); // Length of string
-                        tag_ptr += 2;
-                        theString = [[NSString alloc] initWithData:[NSData dataWithBytes:tag_ptr length:l] encoding:NSUTF8StringEncoding];
-                        tag_ptr += l;
                         l = Endian32_Swap(*(int*)tag_ptr); // Length of data
                         tag_ptr += 4;
+                        if ( debug ) NSLog(@"%@ Found a TAG_ByteArray of length %d", theString, l);
                         if ( [theString isEqualToString:@"Blocks"] ) {
-                            NSData *blocks = [NSData dataWithBytes:tag_ptr length:l];
-                            int o;
-                            char id;
-                            for ( int z=127; z>=0; z-- ) for ( int x=0; x<16; x++ ) for ( int y=0; y<16; y++ ) {
-                                o = y+z*128+x*2048;
-                                id = ((char*)[blocks data])[o];
-                                NSLog(@"Block id %d", (int)id);
-                            }
+                            blocks = [[NSData alloc] initWithBytes:tag_ptr length:l];
+                            got[0] = true;
                         }
-                        [theString release];
                         tag_ptr += l;
                         break;
                         
                     case 6: // TAG_Double
-                        tag_ptr++;
-                        tag_ptr += Endian16_Swap(*(short*)tag_ptr)+sizeof(short); // Skip string ID
+                        if ( debug ) NSLog(@"%@ Found a TAG_Double with value %f", theString, (double)Endian64_Swap(*(double*)tag_ptr));
                         tag_ptr += 8;
                         break;
                         
                     case 5: // TAG_Float
-                        tag_ptr++;
-                        tag_ptr += Endian16_Swap(*(short*)tag_ptr)+sizeof(short); // Skip string ID
+                        if ( debug ) NSLog(@"%@ Found a TAG_Float with value %f", theString, (float)Endian32_Swap(*(float*)tag_ptr));
                         tag_ptr += 4;
                         break;
                         
                     case 4: // TAG_Long
-                        tag_ptr++;
-                        tag_ptr += Endian16_Swap(*(short*)tag_ptr)+sizeof(short); // Skip string ID
+                        if ( debug ) NSLog(@"%@ Found a TAG_Long with value %ld", theString, (long)Endian64_Swap(*(long*)tag_ptr));
                         tag_ptr += 8;
                         break;
                         
                     case 3: // TAG_Int
-                        tag_ptr++;
-/*                        tag_ptr += Endian16_Swap(*(short*)tag_ptr)+sizeof(short); // Skip string ID
-                        tag_ptr += 4;*/
-                        l = Endian16_Swap(*(short*)tag_ptr); // Length of string
-                        tag_ptr += 2;
-                        theString = [[NSString alloc] initWithData:[NSData dataWithBytes:tag_ptr length:l] encoding:NSUTF8StringEncoding];
-                        tag_ptr += l;
+                        if ( debug ) NSLog(@"%@ Found a TAG_Int with value %d", theString, (int)Endian32_Swap(*(int*)tag_ptr));
                         if ( [theString isEqualToString:@"xPos"] ) {
-                            
+                            xpos = (int)Endian32_Swap(*(int*)tag_ptr);
+                            got[1] = true;
                         }
-                        [theString release];
+                        else if ( [theString isEqualToString:@"zPos"] ) {
+                            zpos = (int)Endian32_Swap(*(int*)tag_ptr);
+                            got[2] = true;
+                        }
+                        tag_ptr += 4;
                         break;
                         
                     case 2: // TAG_Short
-                        tag_ptr++;
-                        tag_ptr += Endian16_Swap(*(short*)tag_ptr)+sizeof(short); // Skip string ID
+                        if ( debug ) NSLog(@"%@ Found a TAG_Short with value %d", theString, (short)Endian16_Swap(*(short*)tag_ptr));
                         tag_ptr += 2;
                         break;
                         
                     case 1: // TAG_Byte
-                        tag_ptr++;
-                        tag_ptr += Endian16_Swap(*(short*)tag_ptr)+sizeof(short); // Skip string ID
+                        if ( debug ) NSLog(@"%@ Found a TAG_Byte", theString);
                         tag_ptr += 1;
                         break;
                         
                     case 0: // TAG_End
-                        tag_ptr++;
+                        tag_ptr -= 2; // TAG_End has no string (thus no string length) so move back
+                        break;
                         
                     default:
                         break;
                 }
+                [theString release];
+            }
+            if ( got[0] && got[1] && got[2] ) {
+                NSLog(@"Blocks of length %u at (%f,%f)", (unsigned)[blocks length], xpos-offset.x*32-[self frame].origin.x/16, zpos-offset.y*32-[self frame].origin.y/16);
+//                NSLog(@"%f %f", [self frame].origin.x, [self frame].origin.y);
+                [chunks addObject:[[[ChunkView alloc] initWithCoordsX:xpos-offset.x*32-[self frame].origin.x/16 Z:zpos-offset.y*32-[self frame].origin.y/16 data:blocks] autorelease]];
+                [blocks release];
             }
         }
     }
@@ -225,19 +228,7 @@ MCPixel MCPoint(CGFloat x, CGFloat y, NSColor* color) {
 
 - (void)drawRect:(NSRect)dirtyRect {
     // Drawing code here.
-    NSLog(@"%f %f, %f %f", dirtyRect.origin.x, dirtyRect.origin.y, dirtyRect.size.width, dirtyRect.size.height);
-    MCPoint(0,0,[NSColor redColor]);
-    NSRect r;
-    NSBezierPath *bp;
-    
-    [[NSColor blackColor] set];
-    NSRectFill(dirtyRect);
-    
-    r = NSMakeRect(10, 10, 50, 60);
-    bp = [NSBezierPath bezierPathWithRect:r];
-    [[NSColor blueColor] set];
-    [bp fill];
-    NSLog(@"Redrawn!");
+    NSLog(@"RegionView frame %f %f, %f %f", [self frame].origin.x, [self frame].origin.y, [self frame].size.width, [self frame].size.height);
 }
 
 @end

@@ -3,29 +3,25 @@
 //  McChunk
 //
 //  Created by Michael Barriault on 11-07-04.
-//  Copyright 2011 MikBarr Studios. All rights reserved.
+//  Copyright 2011 Michael Barriault. All rights reserved.
+//  See LICENSE for copyright information
 //
 
 #import <Cocoa/Cocoa.h>
 
-
-typedef NSRect MCPixel;
-MCPixel MCPoint(CGFloat, CGFloat, NSColor*);
 
 @interface RegionView : NSView {
 @private
 @public
     NSString* mapFolder;
     NSString* regionFile;
-    NSData* data;
     NSMutableArray* chunks;
-    NSMutableArray* 
+    NSPoint offset;
 }
 - (id)initWithMap:(NSString*)map andFile:(NSString*)file andOffset:(NSPoint)offset;
-- (void)decompress;
+- (void)decompress:(NSData*)data;
 
 @property (nonatomic, retain) NSString* mapFolder;
 @property (nonatomic, retain) NSString* regionFile;
-@property (nonatomic, retain) NSData* data;
 
 @end
