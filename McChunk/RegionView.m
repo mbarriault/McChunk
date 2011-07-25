@@ -113,7 +113,6 @@ NSData * zlibInflate(NSData* self) {
             ptr = ptr0 + 4096*chunks_offset[i];
             int len = Endian32_Swap(*(int*)ptr);
             ptr += 4;
-            char type = *(char*)ptr;
             ptr += 1;
             //NSLog(@"Length of chunk %d and compression type %d", len, type);
             NSData* compressedData = [NSData dataWithBytes:ptr length:len-1];
@@ -130,22 +129,45 @@ NSData * zlibInflate(NSData* self) {
             int zpos;
             bool got[3];
             for ( int i=0; i<3; i++ ) got[i] = false;
+            NSMutableArray* TagsFound = [[NSMutableArray alloc] initWithCapacity:10];
+            char list_id;
             while ( tag_ptr < tag_ptr0 + [decompressedData length] ) {
                 tag_id = *(char*)tag_ptr;
                 tag_ptr++; // Pass tag ID
-                l = Endian16_Swap(*(short*)tag_ptr); // Length of string
-                tag_ptr += 2; // Go to string
-                theString = [[NSString alloc] initWithData:[NSData dataWithBytes:tag_ptr length:l] encoding:NSUTF8StringEncoding];
-                tag_ptr += l; // Pass string ID
+                if ( tag_id > 0 ) {
+                    l = Endian16_Swap(*(short*)tag_ptr); // Length of string
+                    tag_ptr += 2; // Go to string
+                    theString = [[NSString alloc] initWithData:[NSData dataWithBytes:tag_ptr length:l] encoding:NSUTF8StringEncoding];
+                    if ( theString && ![theString isEqualToString:@""] ) [TagsFound addObject:[NSString stringWithFormat:@"%@ %d", theString, tag_id]];
+                    tag_ptr += l; // Pass string ID
+//                    NSLog(@"TAG %@ of type %d", theString, tag_id);
+                }
+                else if ( tag_id == 0 ) {
+//                    NSLog(@"TAG_End");
+                }
+                else {
+//                    NSLog(@"This shouldn't run...");
+                }
                 switch (tag_id) {
-                    case 10: // TAG_Compound
-                        break;
+//                    case 10: // TAG_Compound
+//                        break;
                         
                     case 9: // TAG_List
+                        list_id = *(char*)tag_ptr0;
                         tag_ptr++;
                         l = Endian32_Swap(*(int*)tag_ptr);
-                        tag_ptr += 4+l;  // Length of list as integer
-                        if ( debug ) NSLog(@"%@ Found a TAG_List of length %d and type %d", theString, l, *(char*)(tag_ptr-l-4-1));
+                        tag_ptr += 4;  // Length of list as integer
+                        if ( debug ) NSLog(@"%@ Found a TAG_List of length %d and type %d", theString, l, list_id);
+                        // If we have a list of compounds, we're just going to move on and assume the list is part of the entire structure
+                        if ( list_id < 10 ) {
+                            int f=0;
+                            if ( list_id == 1 ) f = 1;
+                            else if ( list_id == 2 ) f = 2;
+                            else if ( list_id == 3 || list_id == 5 ) f = 4;
+                            else if ( list_id == 4 || list_id == 6 ) f = 8;
+                            else NSLog(@"Unknown type!!!! %d of type %d", l, list_id);
+                            tag_ptr += l*f;
+                        }
                         break;
                         
                     case 8: // TAG_String
@@ -206,29 +228,30 @@ NSData * zlibInflate(NSData* self) {
                         tag_ptr += 1;
                         break;
                         
-                    case 0: // TAG_End
-                        tag_ptr -= 2; // TAG_End has no string (thus no string length) so move back
-                        break;
+//                    case 0: // TAG_End
+//                        break;
                         
                     default:
                         break;
                 }
-                [theString release];
+                if ( tag_id > 0 ) [theString release];
             }
             if ( got[0] && got[1] && got[2] ) {
-                NSLog(@"Blocks of length %u at (%f,%f)", (unsigned)[blocks length], xpos-offset.x*32-[self frame].origin.x/16, zpos-offset.y*32-[self frame].origin.y/16);
+//                NSLog(@"Blocks of length %u at (%f,%f)", (unsigned)[blocks length], xpos-offset.x*32-[self frame].origin.x/16, zpos-offset.y*32-[self frame].origin.y/16);
 //                NSLog(@"%f %f", [self frame].origin.x, [self frame].origin.y);
                 [chunks addObject:[[[ChunkView alloc] initWithCoordsX:xpos-offset.x*32-[self frame].origin.x/16 Z:zpos-offset.y*32-[self frame].origin.y/16 data:blocks] autorelease]];
                 [blocks release];
             }
+            else if ( got[0] ) {
+                NSLog(@"Got block data but no coordinates, but found tags %@", TagsFound);
+            }
+            else if ( got[1] || got[2] ) {
+                NSLog(@"Got coordinate data but no blocks, but found tags %@", TagsFound);
+            }
+            if ( !TagsFound ) [TagsFound release];
         }
     }
     
-}
-
-- (void)drawRect:(NSRect)dirtyRect {
-    // Drawing code here.
-    NSLog(@"RegionView frame %f %f, %f %f", [self frame].origin.x, [self frame].origin.y, [self frame].size.width, [self frame].size.height);
 }
 
 @end

@@ -14,6 +14,7 @@ MCPixel MCPoint(CGFloat, CGFloat, NSColor*);
 
 @interface ChunkView : NSView {
 @private
+    bool active;
     int x;
     int z;
     char blocks[256];

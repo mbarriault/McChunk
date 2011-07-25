@@ -4,16 +4,19 @@ Copyright 2011 Michael Barriault
 
 Features:
 -Renders top-down 2D render of a world
+-Click-to-select chunks
 
 Upcoming features:
 -Scaled rendering for large worlds
--Click-to-select chunks and regions
+-Easy multiple chunk selection
+-Click-to-select regions
 -Delete chunks
 -Rearrange chunks
 
 Known issues:
 -Will almost definitely crash on large worlds.
 -Some chunks aren't read correctly and won't render (doesn't seem to affect other chunks).
+-Though more chunks are being read than before!
 -Memory leaks very likely.
 -Debug info is abundent, will clog up your Console.
 

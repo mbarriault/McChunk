@@ -10,7 +10,7 @@
 #import "ChunkView.h"
 
 MCPixel MCPoint(CGFloat x, CGFloat y, NSColor* color) {
-    MCPixel aPoint = NSMakeRect(x, y, 2, 2);
+    MCPixel aPoint = NSMakeRect(x, y, 1, 1);
     [color set];
     NSRectFill(aPoint);
     return aPoint;
@@ -30,11 +30,19 @@ MCPixel MCPoint(CGFloat x, CGFloat y, NSColor* color) {
     NSRect frame = NSMakeRect(ix*16, iz*16, 16, 16);
     self = [super initWithFrame:frame];
     if (self) {
+        active = false;
         x = ix;
         z = iz;
         int o;
         char id;
         for ( int i=0; i<16; i++ ) for ( int k=0; k<16; k++ ) {
+            // This algorithm I believe is less efficient
+/*            for ( int j=0; j<128; j++ ) {
+                o = j+k*128+i*2048;
+                id = ((char*)[data bytes])[o];
+                if ( id > 0 ) [self setBlock:id AtX:i AtZ:k];
+            }*/
+            // This algorithm I believe is more efficient and works in the Nether
             bool gotair = false;
             for ( int j=127; j>=0; j-- ) {
                 o = j+k*128+i*2048;
@@ -150,19 +158,32 @@ MCPixel MCPoint(CGFloat x, CGFloat y, NSColor* color) {
     return self;
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
     [blockColors release];
     [super dealloc];
 }
 
-- (void)drawRect:(NSRect)dirtyRect
-{
+-(void)mouseDown:(NSEvent *)theEvent {
+//    NSRect superViewBounds = [self.superview.superview.superview documentVisibleRect];
+    NSLog(@"Got a click! %f %f", [self frame].origin.x, [self frame].origin.y);
+    active = 1-active;
+    [self setNeedsDisplay:YES];
+}
+
+- (void)drawRect:(NSRect)dirtyRect {
     // Drawing code here.
-    NSLog(@"ChunkView frame %f %f, %f %f", [self frame].origin.x, [self frame].origin.y, [self frame].size.width, [self frame].size.height);
-//    NSLog(@"%f %f, %f %f", dirtyRect.origin.x, dirtyRect.origin.y, dirtyRect.size.width, dirtyRect.size.height);
     for ( int i=0; i<16; i++ ) for ( int k=0; k<16; k++ ) {
         MCPoint(i, k, [blockColors objectAtIndex:[self blockAtX:i AtZ:k]]);
+    }
+    if ( active ) {
+        for ( int i=0; i<16; i++ )
+            MCPoint(i, 0, [NSColor whiteColor]);
+        for ( int i=0; i<16; i++ )
+            MCPoint(i, 15, [NSColor whiteColor]);
+        for ( int j=0; j<16; j++ )
+            MCPoint(0, j, [NSColor whiteColor]);
+        for ( int j=0; j<16; j++ )
+            MCPoint(15, j, [NSColor whiteColor]);
     }
 }
 
