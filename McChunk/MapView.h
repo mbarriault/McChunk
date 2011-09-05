@@ -16,7 +16,7 @@
     NSMutableArray* regions;
     NSPoint startClick;
 }
-- (id)initWithMap:(NSString*)mapDir;
+- (id)initWithURL:(NSURL*)mapURL;
 @property (nonatomic, retain) NSMutableArray* regions;
 
 @end

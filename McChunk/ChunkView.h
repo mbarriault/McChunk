@@ -15,14 +15,14 @@ MCPixel MCPoint(CGFloat, CGFloat, NSColor*);
 @interface ChunkView : NSView {
 @private
     BOOL active;
-    int x;
-    int z;
+    NSPoint pos;
     char blocks[256];
-    int posInRegionData;
+    int index;
     NSArray* blockColors;
+    NSData* data;
 }
--(id)initWithCoordsX:(int)ix Z:(int)iz data:(NSData*)data posInRegionData:(int)pos;
+-(id)initWithIndex:(int)i andData:(NSData*)compressedData andOffset:(NSPoint)offset;
 @property (readwrite) BOOL active;
-@property (readwrite) int posInRegionData;
+@property (readwrite) int index;
 
 @end

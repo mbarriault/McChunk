@@ -13,10 +13,10 @@
 
 @interface MapViewController : NSObject {
 @private
+    NSURL* mapURL;
     IBOutlet id window;
-    NSString* mapPath;
 }
 - (IBAction)deleteSelected:(id)sender;
 - (IBAction)openRegion:(id)sender;
-- (void)openMap:(NSString*)path;
+-(void)openMap:(NSURL*)path;
 @end

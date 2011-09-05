@@ -14,14 +14,14 @@
 
 @synthesize regions;
 
-- (id)initWithMap:(NSString*)mapDir {
-    NSArray* files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[NSString stringWithFormat:@"%@", mapDir] error:NULL];
+- (id)initWithURL:(NSURL*)mapURL {
+    NSArray* files = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:mapURL includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
     NSLog(@"%@", files);
     int wspan[2], hspan[2];
     for ( int i=0; i<2; i++ )
         wspan[i] = hspan[i] = 0;
-    for ( NSString* file in files ) {
-        NSArray* comps = [file componentsSeparatedByString:@"."];
+    for ( NSURL* file in files ) {
+        NSArray* comps = [[file lastPathComponent] componentsSeparatedByString:@"."];
         if ( [[comps objectAtIndex:1] intValue] < wspan[0] )
             wspan[0] = [[comps objectAtIndex:1] intValue];
         if ( [[comps objectAtIndex:1] intValue] > wspan[1] )
@@ -39,16 +39,15 @@
     NSRect frame = NSMakeRect(wspan[0]*512, hspan[0]*512, (wspan[1]+1)*512, (hspan[1]+1)*512);
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code here.
-        [regions release];
         regions = [[NSMutableArray alloc] initWithCapacity:[files count]];
-        for ( NSString *regionFile in files ) {
-            [regions addObject:[[[RegionView alloc] initWithMap:mapDir andFile:regionFile andOffset:offset] autorelease]];
+        for ( NSURL* file in files ) {
+            RegionView* region = [[RegionView alloc] initWithMap:file andOffset:offset];
+            [regions addObject:region];
+            [region release];
         }
+        for ( RegionView* region in regions )
+            [self addSubview:region];
     }
-    for ( RegionView* region in regions )
-        [self addSubview:region];
-    
     return self;
 }
 

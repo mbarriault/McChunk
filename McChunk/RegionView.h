@@ -13,18 +13,16 @@
 @interface RegionView : NSView {
 @private
 @public
-    NSString* mapFolder;
-    NSString* regionFile;
+    int x,z;
+    NSURL* mapURL;
     NSMutableArray* chunks;
     NSPoint offset;
     NSMutableData* data;
 }
-- (id)initWithMap:(NSString*)map andFile:(NSString*)file andOffset:(NSPoint)offset;
-- (void)decompress:(NSData*)data;
+- (id)initWithMap:(NSURL*)url andOffset:(NSPoint)ioffset;
 - (void)deleteActive;
 
-@property (nonatomic, retain) NSString* mapFolder;
-@property (nonatomic, retain) NSString* regionFile;
+@property (nonatomic, retain) NSURL* mapURL;
 @property (nonatomic, retain) NSMutableArray* chunks;
 
 @end

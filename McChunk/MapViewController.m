@@ -34,21 +34,20 @@
     NSOpenPanel* open = [NSOpenPanel openPanel];
     [open setCanChooseDirectories:YES];
     [open setCanChooseFiles:NO];
-    //    [open setDirectoryURL:[NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/Library/Application Support/minecraft/saves", NSHomeDirectory()] isDirectory:YES]];
     if ( [open runModal] == NSOKButton ) {
-        mapPath = [[open URL] relativePath];
-        [self openMap:mapPath];
+        mapURL = [open URL];
+        [self openMap:mapURL];
     }
 }
 
--(void)openMap:(NSString*)path {
+-(void)openMap:(NSURL*)path {
     NSScrollView* mapScroller = [[NSScrollView alloc] initWithFrame:[[window contentView] frame]];
     [mapScroller setHasHorizontalScroller:YES];
     [mapScroller setHasVerticalScroller:YES];
     [mapScroller setBorderType:NSNoBorder];
     [mapScroller setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
-    NSLog(@"Scrollview frame %f %f, %f %f", [mapScroller frame].origin.x, [mapScroller frame].origin.y, [mapScroller frame].size.width, [mapScroller frame].size.height);
-    MapView* map = [[MapView alloc] initWithMap:path];
+    //NSLog(@"Scrollview frame %f %f, %f %f", [mapScroller frame].origin.x, [mapScroller frame].origin.y, [mapScroller frame].size.width, [mapScroller frame].size.height);
+    MapView* map = [[MapView alloc] initWithURL:path];
     [mapScroller setDocumentView:map];
     [map release];
     [window setContentView:mapScroller];
@@ -68,11 +67,10 @@
             }
         }
     }
-    [self openMap:mapPath];
 }
 
 - (void)dealloc {
-    [mapPath release];
+    [mapURL release];
     [super dealloc];
 }
 
