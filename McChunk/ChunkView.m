@@ -18,6 +18,8 @@ MCPixel MCPoint(CGFloat x, CGFloat y, NSColor* color) {
 
 @implementation ChunkView
 
+@synthesize active, posInRegionData;
+
 -(char) blockAtX:(int)i AtZ:(int)k {
     return blocks[i+16*k];
 }
@@ -26,11 +28,12 @@ MCPixel MCPoint(CGFloat x, CGFloat y, NSColor* color) {
     blocks[i+16*k] = val;
 }
 
-- (id)initWithCoordsX:(int)ix Z:(int)iz data:(NSData*)data {
+- (id)initWithCoordsX:(int)ix Z:(int)iz data:(NSData*)data posInRegionData:(int)pos {
+    posInRegionData = pos;
     NSRect frame = NSMakeRect(ix*16, iz*16, 16, 16);
     self = [super initWithFrame:frame];
     if (self) {
-        active = false;
+        active = NO;
         x = ix;
         z = iz;
         int o;
@@ -60,7 +63,7 @@ MCPixel MCPoint(CGFloat x, CGFloat y, NSColor* color) {
                        [NSColor brownColor], // Grass
                        [NSColor brownColor], // Dirt
                        [NSColor darkGrayColor], // Cobblestone
-                       [NSColor greenColor], // Plank
+                       [NSColor magentaColor], // Plank
                        [NSColor greenColor], // Sapling
                        [NSColor darkGrayColor], // Bedrock
                        [NSColor blueColor], // Water
@@ -79,7 +82,7 @@ MCPixel MCPoint(CGFloat x, CGFloat y, NSColor* color) {
                        [NSColor orangeColor], // Lapis Lazuli ore
                        [NSColor orangeColor], // Lapis Lazuli block
                        [NSColor magentaColor], // Dispenser
-                       [NSColor yellowColor], // Sandstone
+                       [NSColor magentaColor], // Sandstone
                        [NSColor greenColor], // Note
                        [NSColor greenColor], // Bed
                        [NSColor magentaColor], // Powered rail
@@ -161,13 +164,6 @@ MCPixel MCPoint(CGFloat x, CGFloat y, NSColor* color) {
 - (void)dealloc {
     [blockColors release];
     [super dealloc];
-}
-
--(void)mouseDown:(NSEvent *)theEvent {
-//    NSRect superViewBounds = [self.superview.superview.superview documentVisibleRect];
-    NSLog(@"Got a click! %f %f", [self frame].origin.x, [self frame].origin.y);
-    active = 1-active;
-    [self setNeedsDisplay:YES];
 }
 
 - (void)drawRect:(NSRect)dirtyRect {

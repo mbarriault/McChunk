@@ -14,7 +14,9 @@
 @interface MapView : NSView {
 @private
     NSMutableArray* regions;
+    NSPoint startClick;
 }
 - (id)initWithMap:(NSString*)mapDir;
+@property (nonatomic, retain) NSMutableArray* regions;
 
 @end

@@ -14,7 +14,9 @@
 @interface MapViewController : NSObject {
 @private
     IBOutlet id window;
+    NSString* mapPath;
 }
+- (IBAction)deleteSelected:(id)sender;
 - (IBAction)openRegion:(id)sender;
-
+- (void)openMap:(NSString*)path;
 @end

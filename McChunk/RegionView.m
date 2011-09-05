@@ -10,55 +10,11 @@
 #import "RegionView.h"
 #import "ChunkView.h"
 #import <zlib.h>
-
-// Zlib decompress from and modified into functional form from 
-// http://www.cocoadev.com/index.pl?NSDataCategory
-NSData * zlibInflate(NSData* self) {
-	if ([self length] == 0) return self;
-    
-	unsigned full_length = (unsigned)[self length];
-	unsigned half_length = (unsigned)[self length] / 2;
-    
-	NSMutableData *decompressed = [NSMutableData dataWithLength: full_length + half_length];
-	BOOL done = NO;
-	int status;
-    
-	z_stream strm;
-	strm.next_in = (Bytef *)[self bytes];
-	strm.avail_in = (int)[self length];
-	strm.total_out = 0;
-	strm.zalloc = Z_NULL;
-	strm.zfree = Z_NULL;
-    
-	if (inflateInit (&strm) != Z_OK) return nil;
-    
-	while (!done)
-	{
-		// Make sure we have enough room and reset the lengths.
-		if (strm.total_out >= [decompressed length])
-			[decompressed increaseLengthBy: half_length];
-		strm.next_out = [decompressed mutableBytes] + strm.total_out;
-		strm.avail_out = (unsigned)[decompressed length] - (unsigned)strm.total_out;
-        
-		// Inflate another chunk.
-		status = inflate (&strm, Z_SYNC_FLUSH);
-		if (status == Z_STREAM_END) done = YES;
-		else if (status != Z_OK) break;
-	}
-	if (inflateEnd (&strm) != Z_OK ) return nil;
-    
-	// Set real length.
-	if (done)
-	{
-		[decompressed setLength: strm.total_out];
-		return [NSData dataWithData: decompressed];
-	}
-	else return nil;
-}
+#import "NSData+CocoaDevUsersAdditions.h"
 
 @implementation RegionView
 
-@synthesize mapFolder, regionFile;
+@synthesize mapFolder, regionFile, chunks;
 
 - (id)initWithMap:(NSString *)map andFile:(NSString*)file andOffset:(NSPoint)ioffset {
     offset = ioffset;
@@ -68,7 +24,7 @@ NSData * zlibInflate(NSData* self) {
         if ( [map length] > 0 && [file length] > 0 ) {
             self.mapFolder = map;
             self.regionFile = file;
-            NSData* data = [NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", mapFolder, regionFile]];
+            data = [[NSMutableData alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", mapFolder, regionFile]];
             //NSLog(@"Data length %u", (unsigned)[data length]);
             [self decompress:data];
         }
@@ -81,6 +37,7 @@ NSData * zlibInflate(NSData* self) {
 - (void)dealloc {
     [mapFolder release];
     [chunks release];
+    [data release];
     [super dealloc];
 }
 
@@ -106,6 +63,7 @@ NSData * zlibInflate(NSData* self) {
         ptr += 4;
     }
     NSLog(@"Number of generated chunks in region: %d", num_chunks);
+    if ( chunks != nil ) [chunks release];
     chunks = [[NSMutableArray alloc] initWithCapacity:num_chunks];
     ptr += 4096; // Skip timestamps!
     for ( int i=0; i<1024; i++ ) {
@@ -116,7 +74,7 @@ NSData * zlibInflate(NSData* self) {
             ptr += 1;
             //NSLog(@"Length of chunk %d and compression type %d", len, type);
             NSData* compressedData = [NSData dataWithBytes:ptr length:len-1];
-            NSData* decompressedData = [NSData dataWithData:zlibInflate(compressedData)];
+            NSData* decompressedData = [compressedData zlibInflate];
             //NSLog(@"Compressed %u decompressed %u", (unsigned)[compressedData length], (unsigned)[decompressedData length]);
 
             void* tag_ptr = (void*)[decompressedData bytes];
@@ -125,8 +83,10 @@ NSData * zlibInflate(NSData* self) {
             NSString* theString;
             int tag_id;
             NSData* blocks;
-            int xpos;
-            int zpos;
+            int xpos = i%32;
+            int zpos = (i-xpos)/32;
+            xpos = xpos + offset.x*32;
+            zpos = zpos + offset.y*32;
             bool got[3];
             for ( int i=0; i<3; i++ ) got[i] = false;
             NSMutableArray* TagsFound = [[NSMutableArray alloc] initWithCapacity:10];
@@ -165,7 +125,7 @@ NSData * zlibInflate(NSData* self) {
                             else if ( list_id == 2 ) f = 2;
                             else if ( list_id == 3 || list_id == 5 ) f = 4;
                             else if ( list_id == 4 || list_id == 6 ) f = 8;
-                            else NSLog(@"Unknown type!!!! %d of type %d", l, list_id);
+                            else NSLog(@"Unknown type!!!! %d of type %u", l, list_id);
                             tag_ptr += l*f;
                         }
                         break;
@@ -236,22 +196,47 @@ NSData * zlibInflate(NSData* self) {
                 }
                 if ( tag_id > 0 ) [theString release];
             }
-            if ( got[0] && got[1] && got[2] ) {
+            if ( got[0] ) {
 //                NSLog(@"Blocks of length %u at (%f,%f)", (unsigned)[blocks length], xpos-offset.x*32-[self frame].origin.x/16, zpos-offset.y*32-[self frame].origin.y/16);
 //                NSLog(@"%f %f", [self frame].origin.x, [self frame].origin.y);
-                [chunks addObject:[[[ChunkView alloc] initWithCoordsX:xpos-offset.x*32-[self frame].origin.x/16 Z:zpos-offset.y*32-[self frame].origin.y/16 data:blocks] autorelease]];
+                [chunks addObject:[[[ChunkView alloc] initWithCoordsX:xpos-offset.x*32-[self frame].origin.x/16 Z:zpos-offset.y*32-[self frame].origin.y/16 data:blocks posInRegionData:i] autorelease]];
                 [blocks release];
             }
-            else if ( got[0] ) {
-                NSLog(@"Got block data but no coordinates, but found tags %@", TagsFound);
-            }
-            else if ( got[1] || got[2] ) {
-                NSLog(@"Got coordinate data but no blocks, but found tags %@", TagsFound);
+            else if ( !got[1] || !got[2] ) {
+                NSLog(@"Got block data but no coordinates, using %d %d", xpos, zpos);
             }
             if ( !TagsFound ) [TagsFound release];
         }
     }
     
+}
+
+-(void)deleteActive {
+    for ( ChunkView* chunk in chunks ) {
+        if ( chunk.active ) {
+            int* chunkPos = (int*)([data bytes]+4*chunk.posInRegionData);
+            *chunkPos = 0;
+        }
+    }
+    [self decompress:data];
+    [self setNeedsDisplay:YES];
+    NSString* fullPath = [NSString stringWithFormat:@"%@/%@", mapFolder, regionFile];
+    NSURL* pathURL = [NSURL fileURLWithPath:fullPath];
+    if ( ![data writeToURL:pathURL atomically:YES] ) {
+        NSLog(@"Something went wrong.");
+    }
+}
+
+- (void)drawRect:(NSRect)dirtyRect {
+    // Drawing code here.
+    for ( int i=0; i<512; i++ )
+        MCPoint(i, 0, [NSColor blackColor]);
+    for ( int i=0; i<512; i++ )
+        MCPoint(i, 511, [NSColor blackColor]);
+    for ( int j=0; j<512; j++ )
+        MCPoint(0, j, [NSColor blackColor]);
+    for ( int j=0; j<512; j++ )
+        MCPoint(511, j, [NSColor blackColor]);
 }
 
 @end

@@ -17,11 +17,14 @@
     NSString* regionFile;
     NSMutableArray* chunks;
     NSPoint offset;
+    NSMutableData* data;
 }
 - (id)initWithMap:(NSString*)map andFile:(NSString*)file andOffset:(NSPoint)offset;
 - (void)decompress:(NSData*)data;
+- (void)deleteActive;
 
 @property (nonatomic, retain) NSString* mapFolder;
 @property (nonatomic, retain) NSString* regionFile;
+@property (nonatomic, retain) NSMutableArray* chunks;
 
 @end

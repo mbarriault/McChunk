@@ -8,8 +8,11 @@
 //
 
 #import "MapView.h"
+#import "ChunkView.h"
 
 @implementation MapView
+
+@synthesize regions;
 
 - (id)initWithMap:(NSString*)mapDir {
     NSArray* files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[NSString stringWithFormat:@"%@", mapDir] error:NULL];
@@ -33,7 +36,7 @@
         wspan[i] = wspan[i]-wspan[0];
         hspan[i] = hspan[i]-hspan[0];
     }
-    NSRect frame = NSMakeRect(wspan[0]*512, hspan[0]*512, (wspan[1]-wspan[0]+1)*512, (hspan[1]-hspan[0]+1)*512);
+    NSRect frame = NSMakeRect(wspan[0]*512, hspan[0]*512, (wspan[1]+1)*512, (hspan[1]+1)*512);
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code here.
@@ -54,5 +57,38 @@
     [regions release];
     [super dealloc];
 }
+
+-(void)mouseDown:(NSEvent *)theEvent {
+    startClick = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+    NSLog(@"Got a down click! %f %f", startClick.x, startClick.y);
+}
+
+-(void)keyDown:(NSEvent *)theEvent {
+    NSLog(@"Key pressed %d", [theEvent keyCode]);
+}
+
+-(void)mouseUp:(NSEvent *)theEvent {
+    NSPoint stopClick = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+    NSLog(@"Got an up click! %f %f", stopClick.x, stopClick.y);
+    float xmin = startClick.x < stopClick.x ? startClick.x : stopClick.x;
+    float ymin = startClick.y < stopClick.y ? startClick.y : stopClick.y;
+    float xmax = startClick.x > stopClick.x ? startClick.x : stopClick.x;
+    float ymax = startClick.y > stopClick.y ? startClick.y : stopClick.y;
+    for ( RegionView* region in regions ) {
+        NSRect regionFrame = [region frame];
+        for ( ChunkView* chunk in region.chunks ) {
+            NSRect chunkFrame = [chunk frame];
+            if ( regionFrame.origin.x + chunkFrame.origin.x + chunkFrame.size.width >= xmin && regionFrame.origin.x + chunkFrame.origin.x <= xmax && regionFrame.origin.y + chunkFrame.origin.y + chunkFrame.size.height >= ymin && regionFrame.origin.y + chunkFrame.origin.y <= ymax ) {
+                NSLog(@"Setting chunk to be active. %f %f", regionFrame.origin.y + chunkFrame.origin.x, regionFrame.origin.y + chunkFrame.origin.y);
+                chunk.active = YES;
+            } else {
+                chunk.active = NO;
+            }
+        }
+    }
+    [self setNeedsDisplay:YES];
+}
+
+
 
 @end
