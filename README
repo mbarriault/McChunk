@@ -4,23 +4,50 @@ Copyright 2011 Michael Barriault
 
 Features:
 -Renders top-down 2D render of a world
--Click-to-select chunks
+-Click-and-drag chunks
+-Press Command+Delete to delete chunks - immediately saves
 
 Upcoming features:
 -Scaled rendering for large worlds
 -Easy multiple chunk selection
--Click-to-select regions
--Delete chunks
 -Rearrange chunks
 
 Known issues:
--Will almost definitely crash on large worlds.
--Some chunks aren't read correctly and won't render (doesn't seem to affect other chunks).
--Though more chunks are being read than before!
+-Map is rotated and mirrored.
+ -North is left
+ -South is right
+ -West is up
+ -East is down
+-Memory intensive. Seems to cost about 100 MB of RAM per region.
 -Memory leaks very likely.
 -Debug info is abundent, will clog up your Console.
+-Only works on zlib-compressed worlds - shouldn't be an issue for vanilla (both
+ SSP and SMP) worlds, and even most Bukkit worlds (unless you're using a plugin
+ that uses a different compression scheme).
 
 Howto:
 -Open app
 -File->Open
 -Choose folder containing .mcr files.
+
+Recommendations:
+-Strongly recommend to back up first. This app comes with NO GUARANTEE. The
+ region files are saved AS SOON AS YOU DELETE. There is no built-in backup.
+-This renders a 1 pixel = 1 block top-down image of the entire world. Only 
+ having a few region files at a time.
+
+For example!
+You have a region folder that contains a lot regions. They're named like
+    r.0.0.mcr
+    r.0.1.mcr
+    r.0.-1.mcr
+    r.1.0.mcr
+    r.-1.-1.mcr
+    ... and so on...
+These numbers represent a X,Z coordinate system that are related to the in-game
+coordinates by multiplying by 512. If McChunk is crashing on your world, try
+moving some .mcr files out of the region folder temporarily so that the ones 
+that remain are all connected but represent a much smaller region.
+
+The SMP server I run, with 37 region files, crashes McChunk on my MacBook, but
+runs just fine on my iMac (quad-core i5, 12 GB of RAM).
