@@ -246,6 +246,19 @@ MCPixel MCPoint(CGFloat x, CGFloat y, NSColor* color) {
                        [NSColor magentaColor], // Redstone repeater on
                        [NSColor greenColor], // Locked chest
                        [NSColor greenColor], // Trapdoor
+                       [NSColor darkGrayColor], // Silverfish stone
+                       [NSColor darkGrayColor], // Stone brick
+                       [NSColor brownColor], // Mushroom
+                       [NSColor brownColor], // Mushroom
+                       [NSColor grayColor], // Iron Bars
+                       [NSColor yellowColor], // Glass pane
+                       [NSColor yellowColor], // Melon
+                       [NSColor blackColor], // Unknown
+                       [NSColor blackColor], // Unknown
+                       [NSColor greenColor], // Vines
+                       [NSColor brownColor], // Fence gate
+                       [NSColor darkGrayColor], // Brick stairs
+                       [NSColor darkGrayColor], // Stone brick stairs
                        nil];
     }
     return self;
