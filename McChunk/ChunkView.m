@@ -9,6 +9,7 @@
 
 #import "ChunkView.h"
 #import "NSData+CocoaDevUsersAdditions.h"
+#import "NSColor+MoreColors.h"
 
 MCPixel MCPoint(CGFloat x, CGFloat y, NSColor* color) {
     MCPixel aPoint = NSMakeRect(x, y, 1, 1);
@@ -141,6 +142,7 @@ MCPixel MCPoint(CGFloat x, CGFloat y, NSColor* color) {
             }
             if ( tag_id > 0 ) [theString release];
         }
+        [TagsFound release];
         if ( blockData ) {
             [self constructFromBlockData:blockData];
             [blockData release];
@@ -151,46 +153,46 @@ MCPixel MCPoint(CGFloat x, CGFloat y, NSColor* color) {
         blockColors = [[NSArray alloc] initWithObjects:
                        [NSColor blackColor], // Air
                        [NSColor darkGrayColor], // Stone
-                       [NSColor brownColor], // Grass
+                       [NSColor greenColor], // Grass
                        [NSColor brownColor], // Dirt
                        [NSColor darkGrayColor], // Cobblestone
-                       [NSColor magentaColor], // Plank
+                       [NSColor brownColor], // Plank
                        [NSColor greenColor], // Sapling
-                       [NSColor darkGrayColor], // Bedrock
+                       [NSColor blackColor], // Bedrock
                        [NSColor blueColor], // Water
                        [NSColor blueColor], // Still water
                        [NSColor redColor], // Lava
                        [NSColor redColor], // Still lava
                        [NSColor yellowColor], // Sand
                        [NSColor yellowColor], // Gravel
-                       [NSColor orangeColor], // Gold ore
+                       [NSColor goldColor], // Gold ore
                        [NSColor orangeColor], // Iron ore
-                       [NSColor orangeColor], // Coal ore
-                       [NSColor greenColor], // Wood
+                       [NSColor darkGrayColor], // Coal ore
+                       [NSColor woodColor], // Wood
                        [NSColor greenColor], // Leaves
                        [NSColor yellowColor], // Sponge
                        [NSColor yellowColor], // Glass
-                       [NSColor orangeColor], // Lapis Lazuli ore
-                       [NSColor orangeColor], // Lapis Lazuli block
-                       [NSColor magentaColor], // Dispenser
-                       [NSColor magentaColor], // Sandstone
-                       [NSColor greenColor], // Note
-                       [NSColor greenColor], // Bed
-                       [NSColor magentaColor], // Powered rail
-                       [NSColor magentaColor], // Detector rail
-                       [NSColor magentaColor], // Sticky piston
+                       [NSColor blueColor], // Lapis Lazuli ore
+                       [NSColor blueColor], // Lapis Lazuli block
+                       [NSColor grayColor], // Dispenser
+                       [NSColor yellowColor], // Sandstone
+                       [NSColor brownColor], // Note
+                       [NSColor redColor], // Bed
+                       [NSColor grayColor], // Powered rail
+                       [NSColor grayColor], // Detector rail
+                       [NSColor grayColor], // Sticky piston
                        [NSColor yellowColor], // Cobweb
-                       [NSColor brownColor], // Tall grass
-                       [NSColor brownColor], // Dead shrubs
-                       [NSColor magentaColor], // Piston
-                       [NSColor magentaColor], // Piston extension
+                       [NSColor greenColor], // Tall grass
+                       [NSColor greenColor], // Dead shrubs
+                       [NSColor brownColor], // Piston
+                       [NSColor brownColor], // Piston extension
                        [NSColor whiteColor], // Wool
-                       [NSColor magentaColor], // Piston moved
-                       [NSColor brownColor], // Dandelion
-                       [NSColor brownColor], // Rose
+                       [NSColor brownColor], // Piston moved
+                       [NSColor yellowColor], // Dandelion
+                       [NSColor redColor], // Rose
                        [NSColor brownColor], // Brown mushroom
-                       [NSColor brownColor], // Red mushroom
-                       [NSColor orangeColor], // Gold block
+                       [NSColor redColor], // Red mushroom
+                       [NSColor colorWithDeviceRed:1. green:0.84 blue:0. alpha:1.], // Gold block
                        [NSColor orangeColor], // Iron block
                        [NSColor darkGrayColor], // Double slabs
                        [NSColor darkGrayColor], // Slabs
@@ -290,7 +292,11 @@ MCPixel MCPoint(CGFloat x, CGFloat y, NSColor* color) {
 - (void)drawRect:(NSRect)dirtyRect {
     // Drawing code here.
     for ( int i=0; i<16; i++ ) for ( int k=0; k<16; k++ ) {
-        MCPoint(i, k, [blockColors objectAtIndex:[self blockAtX:i AtZ:k]]);
+        int c = [self blockAtX:i AtZ:k];
+        if ( c > [blockColors count] )
+            MCPoint(i, k, [NSColor blackColor]);
+        else
+            MCPoint(i, k, [blockColors objectAtIndex:c]);
     }
     if ( active ) {
         for ( int i=0; i<16; i++ )

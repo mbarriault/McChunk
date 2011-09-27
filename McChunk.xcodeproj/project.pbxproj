@@ -17,6 +17,7 @@
 		6C4310CB13C24FA3004B9B8B /* RegionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4310CA13C24FA3004B9B8B /* RegionView.m */; };
 		6C4310CE13C3A820004B9B8B /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C4310CD13C3A820004B9B8B /* MapViewController.m */; };
 		6C934F4E14145CE200B47B57 /* NSData+CocoaDevUsersAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C934F4D14145CE200B47B57 /* NSData+CocoaDevUsersAdditions.m */; };
+		6C9CD7E31426C7DB006149DE /* NSColor+MoreColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C9CD7E21426C7DB006149DE /* NSColor+MoreColors.m */; };
 		6CBB82CC13D3436000116F56 /* ChunkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBB82CB13D3436000116F56 /* ChunkView.m */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,8 @@
 		6C4310CD13C3A820004B9B8B /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		6C934F4C14145CE200B47B57 /* NSData+CocoaDevUsersAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+CocoaDevUsersAdditions.h"; path = "Extended/NSData+CocoaDevUsersAdditions.h"; sourceTree = "<group>"; };
 		6C934F4D14145CE200B47B57 /* NSData+CocoaDevUsersAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+CocoaDevUsersAdditions.m"; path = "Extended/NSData+CocoaDevUsersAdditions.m"; sourceTree = "<group>"; };
+		6C9CD7E11426C7DB006149DE /* NSColor+MoreColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+MoreColors.h"; sourceTree = "<group>"; };
+		6C9CD7E21426C7DB006149DE /* NSColor+MoreColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+MoreColors.m"; sourceTree = "<group>"; };
 		6CBB82CA13D3436000116F56 /* ChunkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChunkView.h; sourceTree = "<group>"; };
 		6CBB82CB13D3436000116F56 /* ChunkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChunkView.m; sourceTree = "<group>"; };
 		6CBB82D213D3793000116F56 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -114,6 +117,8 @@
 				6C934F4D14145CE200B47B57 /* NSData+CocoaDevUsersAdditions.m */,
 				6CBB82CA13D3436000116F56 /* ChunkView.h */,
 				6CBB82CB13D3436000116F56 /* ChunkView.m */,
+				6C9CD7E11426C7DB006149DE /* NSColor+MoreColors.h */,
+				6C9CD7E21426C7DB006149DE /* NSColor+MoreColors.m */,
 				6C4310B013C24962004B9B8B /* Supporting Files */,
 			);
 			path = McChunk;
@@ -201,6 +206,7 @@
 				6C4310CE13C3A820004B9B8B /* MapViewController.m in Sources */,
 				6CBB82CC13D3436000116F56 /* ChunkView.m in Sources */,
 				6C934F4E14145CE200B47B57 /* NSData+CocoaDevUsersAdditions.m in Sources */,
+				6C9CD7E31426C7DB006149DE /* NSColor+MoreColors.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,7 +252,7 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-lz";
 				SDKROOT = macosx10.6;
@@ -262,7 +268,7 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				OTHER_LDFLAGS = "-lz";
 				SDKROOT = macosx10.6;
 			};
